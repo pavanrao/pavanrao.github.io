@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>plog (Posts about blog)</title><link>https://pavanrao.in/</link><description></description><atom:link href="https://pavanrao.in/categories/blog.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:pavanraomr@gmail.com"&gt;pavan rao&lt;/a&gt; </copyright><lastBuildDate>Wed, 16 Sep 2020 00:18:49 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>My first post</title><link>https://pavanrao.in/posts/my-first-post/</link><dc:creator>pavan rao</dc:creator><description>&lt;div&gt;&lt;p&gt;Finally I got around to setup a blog. &lt;/p&gt;
+&lt;p&gt;You have started a blog like me and want some pretty pictures on your blog? &lt;/p&gt;
+&lt;p&gt;Do you want nice photos like the ones you see on Medium blogs? &lt;/p&gt;
+&lt;p&gt;Unsplash is the place to go to get nice copyright free images that you can use. Refer this link for their license: https://unsplash.com/license . Basically you can do anything you want other than sell those images. &lt;/p&gt;
+&lt;p&gt;Unsplash also provides an api to get images. You can get random images, or specific image by id, or you could request images using keywords like nature, cat, beach, and so on. &lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://source.unsplash.com/random&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://pavanrao.in/posts/my-first-post/"&gt;&lt;img alt="" src="https://source.unsplash.com/random"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;To get a random cat image of size 800x900:&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;https://source.unsplash.com/800x900/?cat&lt;/code&gt;
+&lt;a href="https://pavanrao.in/posts/my-first-post/"&gt;&lt;img alt="" src="https://source.unsplash.com/800x900/?cat"&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>blog</category><guid>https://pavanrao.in/posts/my-first-post/</guid><pubDate>Wed, 16 Sep 2020 00:15:11 GMT</pubDate></item></channel></rss>

@@ -1,0 +1,4 @@
+Sitemap: https://pavanrao.in/sitemapindex.xml
+
+User-Agent: *
+Host: pavanrao.in
