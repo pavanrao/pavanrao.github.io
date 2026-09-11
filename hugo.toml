@@ -1,6 +1,6 @@
 baseURL = 'https://pavanrao.github.io/'
 languageCode = 'en-us'
-title = "Pavan's Tech Notes"
+title = "Pavan Rao"
 theme = 'PaperMod'
 
 # Enable useful features
@@ -31,15 +31,7 @@ buildExpired = false
   showtoc = true
   tocopen = false
   
-  # Home page info mode
-  [params.homeInfoParams]
-    Title = "Welcome to my Tech Notes 👋"
-    Content = "PLACEHOLDER — replace this with the positioning statement. It is the first thing a reader sees, so it should say what you do now and what you are moving toward, not just what this site contains."
 
-  # Social icons on home
-  [[params.socialIcons]]
-    name = "github"
-    url = "https://github.com/pavanrao"
 
   # Cover image defaults
   [params.cover]
@@ -73,6 +65,11 @@ buildExpired = false
     name = "Posts"
     url = "/posts/"
     weight = 20
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 25
   [[menu.main]]
     identifier = "search"
     name = "Search"

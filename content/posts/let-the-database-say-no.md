@@ -235,10 +235,15 @@ and I don't have a number either way. There's a lab in the backlog to measure it
 haven't run it.
 
 <div class="colophon">
+  <p><strong>The code.</strong> <code>sqlite-mcp</code> lives in
+  <a href="https://github.com/pavanrao/data-tools">pavanrao/data-tools</a> under
+  <code>tools/sqlite-mcp/</code>. Its design record is
+  <code>docs/009_sqlite-mcp.md</code>, and the protocol concepts it exercises —
+  along with the ones it does not — are in <code>docs/010_mcp-concepts.md</code>.</p>
   <p><strong>How this was made.</strong> <code>sqlite-mcp</code> and this write-up were
-  both built with Claude Code, across two afternoons. The commit history and the design
-  record are in the repo if you want to see the shape of that. Every error message
-  quoted here was copied out of a terminal rather than recalled.</p>
+  both built with Claude Code, across two afternoons. The commit history shows the
+  shape of that if you are curious. Every error message quoted here was copied out
+  of a terminal rather than recalled.</p>
   <p>Written against MCP protocol revision 2026-07-28, which removed the initialize
   handshake and protocol-level sessions. If a tutorial you're reading mentions either,
   it predates this.</p>
