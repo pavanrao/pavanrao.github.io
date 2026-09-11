@@ -1,0 +1,96 @@
+baseURL = 'https://pavanrao.github.io/'
+languageCode = 'en-us'
+title = "Pavan's Tech Notes"
+theme = 'PaperMod'
+
+# Enable useful features
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+[params]
+  env = "production"
+  description = "Learnings on coding and data engineering"
+  author = "Pavan Rao"
+  
+  # Theme settings
+  defaultTheme = "auto" # dark, light, or auto
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = false
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+  disableSpecial1stPost = false
+  disableScrollToTop = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = true
+  tocopen = false
+  
+  # Home page info mode
+  [params.homeInfoParams]
+    Title = "Welcome to my Tech Notes 👋"
+    Content = "PLACEHOLDER — replace this with the positioning statement. It is the first thing a reader sees, so it should say what you do now and what you are moving toward, not just what this site contains."
+
+  # Social icons on home
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/pavanrao"
+
+  # Cover image defaults
+  [params.cover]
+    hidden = true
+    hiddenInList = true
+    hiddenInSingle = true
+
+  # Search
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort = true
+    location = 0
+    distance = 1000
+    threshold = 0.4
+    minMatchCharLength = 0
+    keys = ["title", "permalink", "summary", "content"]
+
+# Output formats for search
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+# Menu
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 20
+  [[menu.main]]
+    identifier = "search"
+    name = "Search"
+    url = "/search/"
+    weight = 30
+  [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 40
+
+# Enable goldmark unsafe for HTML in markdown
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    style = "monokai"

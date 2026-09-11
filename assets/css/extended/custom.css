@@ -1,0 +1,115 @@
+/* Components used by long-form posts.
+ *
+ * Structural colours come from PaperMod's own variables so light and dark are
+ * handled by the theme. Only the semantic pair below is ours: permit-green and
+ * deny-red, which carry meaning rather than decoration and therefore cannot be
+ * inherited from a neutral palette. */
+
+:root {
+  --ok: #1f6b45;
+  --ok-wash: #d5e7dc;
+  --bad: #a32320;
+  --bad-wash: #f5dad8;
+}
+
+:root[data-theme="dark"] {
+  --ok: #5fb98c;
+  --ok-wash: #16281f;
+  --bad: #e8807a;
+  --bad-wash: #2c1918;
+}
+
+/* A lede paragraph: the standfirst that opens an essay. */
+.post-content p.lede {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--secondary);
+}
+
+/* Verdict rows: a short verdict tag beside the case it applies to. Composed as
+   one object, so every row shares its edges, padding and baseline. */
+.verdicts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 0 1.6rem;
+}
+
+.verdict {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.7rem 0.9rem;
+  background: var(--entry);
+}
+
+.verdict p {
+  margin: 0;
+  font-size: 0.925rem;
+}
+
+.tag-verdict {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.tag-verdict.no {
+  background: var(--bad-wash);
+  color: var(--bad);
+}
+
+.tag-verdict.yes {
+  background: var(--ok-wash);
+  color: var(--ok);
+}
+
+/* A callout: one aside that generalises the argument. Used sparingly. */
+.callout {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--secondary);
+  border-radius: var(--radius);
+  padding: 1rem 1.15rem;
+  margin: 0 0 1.6rem;
+  background: var(--code-bg);
+}
+
+.callout p:last-child {
+  margin-bottom: 0;
+}
+
+.callout .label {
+  display: block;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 0.4rem;
+}
+
+/* Wide content scrolls in its own container rather than the page body. */
+.post-content table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* The colophon that closes an essay. */
+.colophon {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.925rem;
+  color: var(--secondary);
+}
+
+.colophon p {
+  margin: 0 0 0.85rem;
+}
