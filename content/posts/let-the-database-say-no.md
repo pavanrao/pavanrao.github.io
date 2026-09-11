@@ -10,10 +10,11 @@ categories: ["Data Engineering"]
 the query. That's a denylist, and denylists have to guess what's coming. SQLite has
 had a better answer sitting in it for twenty years.</p>
 
-The plan was a small MCP server: read-only SQL over a SQLite file, three tools, a
-row cap. I assumed the time would go on the protocol. It didn't. Nearly all of it
-went on one question that turned out to be harder than it looks — when an agent
-hands you a SQL statement, how do you decide whether to run it?
+The plan was a small [MCP](https://modelcontextprotocol.io/) server: read-only SQL
+over a SQLite file, three tools, a row cap. I assumed the time would go on the
+protocol. It didn't. Nearly all of it went on one question that turned out to be
+harder than it looks — when an agent hands you a SQL statement, how do you decide
+whether to run it?
 
 ## First attempt: read the SQL
 
@@ -87,7 +88,9 @@ the same one deciding whether it may. Those four cases from earlier:
 <div class="verdicts">
   <div class="verdict">
     <span class="tag-verdict yes">denies</span>
-    <p>The writing CTE. It reaches <code>SQLITE_DELETE</code>, which isn't a read.</p>
+    <p>The writing CTE — though on SQLite the parser gets there first, because its
+    CTEs are SELECT-only. On an engine where that statement is legal, the authorizer
+    is what stops it.</p>
   </div>
   <div class="verdict">
     <span class="tag-verdict yes">denies</span>
@@ -190,6 +193,84 @@ it would be bytes scanned and money. A model can't trade accuracy against cost i
 has no idea what anything costs. On SQLite that's a rounding error and the field is
 nearly pointless. On Snowflake it's the whole bill — the compute dwarfs the token
 spend by more than people expect, and the agent's loop is what drives it.
+
+## Run it against something real
+
+[Chinook](https://github.com/lerocha/chinook-database) is a sample database most
+people have run into: a fictional music store, with a catalogue of artists, albums
+and tracks sitting next to a `Customer` table full of names, addresses, phone
+numbers and email addresses. That split is useful here, because it is the same split
+you have in production — the thing an agent should see, beside the thing it should
+not.
+
+```bash
+curl -L -o chinook.db \
+  https://github.com/lerocha/chinook-database/releases/download/v1.4.5/Chinook_Sqlite.sqlite
+```
+
+The server is three tools. This is one of them, in full:
+
+```python
+@server.tool()
+def query(sql: str) -> dict[str, object]:
+    """Run one read-only SQL statement. Returns rows, plus whether the row cap
+    truncated them."""
+    return query_impl(db, sql)
+```
+
+Start it scoped to the catalogue, and the customers simply are not there:
+
+```console
+$ sqlite-mcp --table Album --table Artist --table Track schema chinook.db
+Album
+    AlbumId                  INTEGER NOT NULL PK
+    Title                    NVARCHAR(160) NOT NULL
+    ArtistId                 INTEGER NOT NULL
+Artist
+    ArtistId                 INTEGER NOT NULL PK
+    Name                     NVARCHAR(120)
+Track
+    TrackId                  INTEGER NOT NULL PK
+    Name                     NVARCHAR(200) NOT NULL
+    ...
+```
+
+A normal query, capped, saying so:
+
+```console
+$ sqlite-mcp --max-rows 3 query chinook.db "SELECT Name FROM Artist ORDER BY ArtistId"
+Name
+---------
+AC/DC
+Accept
+Aerosmith
+
+-- truncated at 3 rows; this answer is partial.
+```
+
+And four things it will not do. Each names the guard that stopped it, and exits
+non-zero, so a script can branch without parsing the sentence:
+
+```console
+$ sqlite-mcp --table Album --table Artist --table Track \
+    query chinook.db "SELECT Email, Phone FROM Customer"
+refused [table-not-allowed]: that table is outside the tables this server exposes
+
+$ sqlite-mcp query chinook.db "DELETE FROM Customer WHERE CustomerId = 1"
+refused [not-read-only]: this database is served read-only; the statement asked to change it
+
+$ sqlite-mcp query chinook.db "SELECT 1; DROP TABLE Album"
+refused [multiple-statements]: only one statement may be sent at a time; a second statement cannot ride along
+
+$ sqlite-mcp query chinook.db "PRAGMA journal_mode = WAL"
+refused [not-read-only]: this database is served read-only; the statement asked to change it
+```
+
+That last one is the case a keyword scan waves through. There is no `DROP`, no
+`DELETE`, no `UPDATE` anywhere in it, and it changes how the database writes to disk.
+
+Afterwards the file is byte-for-byte what it was. 59 customers, 347 albums, same
+checksum.
 
 ## Was it worth building?
 
