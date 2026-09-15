@@ -159,34 +159,31 @@ every Python v1 server in this table — dbt Labs' included — looks like a ser
 won't talk to you at all. The Python v2 SDK's own negotiation falls back on nearly any
 error, which handles both kinds of refusal in the table.
 
-## What running it on real servers taught me about the probe
+## When a server isn't answering
 
-MotherDuck's first result was `neither`, meaning it had answered and refused both
-protocols, and the probe exited successfully. In fact it had died on startup before
-answering anything, because I'd left off a flag it needs:
+A server that didn't answer can look like one that refused, and on real servers that
+happened in two different ways.
+
+The Python SDK reports a server process that's exited as an ordinary MCP error, with
+the code `-32000` and the message "Connection closed". Treat every error as the server
+declining and a crash reads as a refusal, which is what my probe did with MotherDuck.
+It had exited on startup because I'd left off a flag it needs:
 
 ```text
 Error: In-memory databases require the --read-write flag.
 ```
 
-The SDK reports a dead server process as an error with the code `-32000` and the
-message "Connection closed", and my probe treated every SDK error as the server saying
-no. It had also been sending the server's stderr to `/dev/null`, which is
-where that line went. A crashed server now reads as unreachable, exits
-with a failure code, and shows the tail of its stderr. With the flag added, MotherDuck
-speaks both.
+Its first result said it had refused both protocols. The probe now counts a closed
+connection as no answer and keeps the server's stderr, which is the only place that
+message went. With the flag added, MotherDuck speaks both.
 
-`dbt-mcp` timed out on discovery the first time I ran it and answered normally every
-time after. Discovery runs first, so on a first `uvx` run it also absorbs downloading
-the package, while the handshake that follows finds a warm cache. That would have made
-any server I probed for the first time look more old-fashioned than it is. Now, if
-discovery gets no answer but the handshake then succeeds, the probe tries discovery
-once more and says it did. A server that never answers at all times out twice.
-
-I also made a mistake outside the probe. I'd concluded that the Python servers' error
-code and message contradicted each other, because the message read "Invalid request".
-My own summary script had cut every message at 40 characters, and the full text was
-"Invalid request parameters", which matches the code.
+The other way is a slow first launch. A server started with `npx` or `uvx` downloads its
+package the first time, and a short timeout on the first request can run out during the
+download. `dbt-mcp` timed out on `server/discover` on my first run and answered normally
+on every run after, because discovery went first and the handshake that followed found
+the package already cached. A host that launches stdio servers that way with a tight
+first-request timeout would hit the same thing. The probe now retries discovery once if
+the handshake after it succeeds, so a server that doesn't answer at all still times out twice.
 
 ## Run it yourself
 
