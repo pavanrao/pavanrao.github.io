@@ -1,15 +1,18 @@
 /* Components used by long-form posts.
  *
  * Structural colours come from PaperMod's own variables so light and dark are
- * handled by the theme. Only the semantic pair below is ours: permit-green and
- * deny-red, which carry meaning rather than decoration and therefore cannot be
- * inherited from a neutral palette. */
+ * handled by the theme. Only the semantic colours below are ours: permit-green,
+ * deny-red, and the gold that marks an answer span. They carry meaning rather
+ * than decoration and therefore cannot be inherited from a neutral palette. */
 
 :root {
   --ok: #1f6b45;
   --ok-wash: #d5e7dc;
   --bad: #a32320;
   --bad-wash: #f5dad8;
+  --mark: #f2c46b;
+  --mark-wash: #fbebc7;
+  --mark-ink: #6b4708;
 }
 
 :root[data-theme="dark"] {
@@ -17,6 +20,9 @@
   --ok-wash: #16281f;
   --bad: #e8807a;
   --bad-wash: #2c1918;
+  --mark: #d8a63f;
+  --mark-wash: #3b2e12;
+  --mark-ink: #f4d89a;
 }
 
 /* A lede paragraph: the standfirst that opens an essay. */
